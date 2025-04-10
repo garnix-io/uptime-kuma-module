@@ -2,7 +2,8 @@
   description = "A garnix module for Uptime Kuma";
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
-  inputs.garnix-lib.url = "github:jfroche/garnix-lib/jfroche/expose-module-for-system";
+  inputs.garnix-lib.url =
+    "github:jfroche/garnix-lib/jfroche/expose-module-for-system";
 
   outputs = { self, nixpkgs, garnix-lib, }:
     let
@@ -19,32 +20,33 @@
       garnixModules.default = { pkgs, config, ... }: {
         options = {
           uptimeKuma = lib.mkOption {
-            type = lib.types.submodule uptimeKumaSubmodule;
+            type = lib.types.attrsOf (lib.types.submodule uptimeKumaSubmodule);
             description = "An attrset of uptime-kuma instances";
           };
         };
 
         config = {
-          nixosConfigurations.default = [{
-            services.uptime-kuma = {
-              enable = true;
-              settings.UPTIME_KUMA_PORT = toString config.uptimeKuma.port;
-            };
-            garnix.server.persistence = {
-              enable = true;
-              name = "uptimeKuma";
-            };
-            services.nginx = {
-              enable = true;
-              recommendedProxySettings = true;
-              recommendedOptimisation = true;
-              virtualHosts.default = {
-                locations."/".proxyPass =
-                  "http://localhost:${toString config.uptimeKuma.port}";
+          nixosConfigurations.default = builtins.attrValues (builtins.mapAttrs
+            (name: projectConfig: {
+              services.uptime-kuma = {
+                enable = true;
+                settings.UPTIME_KUMA_PORT = toString projectConfig.port;
               };
-            };
-            networking.firewall.allowedTCPPorts = [ 80 ];
-          }];
+              garnix.server.persistence = {
+                enable = true;
+                name = "uptimeKuma";
+              };
+              services.nginx = {
+                enable = true;
+                recommendedProxySettings = true;
+                recommendedOptimisation = true;
+                virtualHosts.default = {
+                  locations."/".proxyPass =
+                    "http://localhost:${toString projectConfig.port}";
+                };
+              };
+              networking.firewall.allowedTCPPorts = [ 80 ];
+            }) config.uptimeKuma);
         };
       };
       checks.x86_64-linux.default = pkgs.testers.runNixOSTest ({ lib, ... }: {
@@ -53,7 +55,7 @@
           let
             evaledGarnixModuleConfig = (garnix-lib.lib.evaledModulesForSystems {
               modules = [ self.garnixModules.default ({ }) ];
-              config = { uptimeKuma.port = 8001; };
+              config = { uptimeKuma.default.port = 8001; };
             }).x86_64-linux;
           in {
             imports = [ garnix-lib.nixosModules.garnix ]
