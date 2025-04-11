@@ -15,6 +15,11 @@
           description = "The port in which to run uptime-kuma";
           default = 3001;
         };
+        path = lib.mkOption {
+          type = lib.types.nonEmptyStr;
+          description = "Webserver path to host your uptime-kuma server on";
+          default = "/";
+        };
       };
     in {
       garnixModules.default = { pkgs, config, ... }: {
@@ -41,7 +46,7 @@
                 recommendedProxySettings = true;
                 recommendedOptimisation = true;
                 virtualHosts.default = {
-                  locations."/".proxyPass =
+                  locations."${projectConfig.path}".proxyPass =
                     "http://localhost:${toString projectConfig.port}";
                 };
               };
