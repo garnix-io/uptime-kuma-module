@@ -4,6 +4,6 @@
 
 Deploy your own [Uptime Kuma](https://github.com/louislam/uptime-kuma) instance with garnix here: https://garnix.io/modules/configure.
 
-Select the Uptime Kuma module, select on of your GitHub repository and click on preview to deploy your Uptime Kuma instance.
+Select one of your GitHub repositories, select the Uptime Kuma module and click on preview to deploy your Uptime Kuma instance.
 
 For more info, see the [modules documentation](https://garnix.io/modules).
