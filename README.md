@@ -2,7 +2,7 @@
 
 # Garnix module to self host Uptime Kuma
 
-Start deploying your own [Uptime Kuma](https://github.com/louislam/uptime-kuma) instance with [garnix here](https://garnix.io/modules/configure).
+Deploy your own [Uptime Kuma](https://github.com/louislam/uptime-kuma) instance with garnix here: https://garnix.io/modules/configure.
 
 Select the Uptime Kuma module, select on of your GitHub repository and click on preview to deploy your Uptime Kuma instance.
 
