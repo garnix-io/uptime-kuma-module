@@ -1,23 +1,26 @@
 {
-  description = "A garnix module for Uptime Kuma";
+  description = ''
+    A garnix module for Uptime Kuma.
+
+    [Source](https://github.com/garnix-io/uptime-kuma-module).
+  '';
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
   inputs.garnix-lib.url =
     "github:jfroche/garnix-lib/jfroche/expose-module-for-system";
 
-  outputs = { self, nixpkgs, garnix-lib, }:
+  outputs = { self, nixpkgs, ... }:
     let
       lib = nixpkgs.lib;
-      pkgs = import nixpkgs { system = "x86_64-linux"; };
       uptimeKumaSubmodule.options = {
         port = lib.mkOption {
           type = lib.types.port;
-          description = "The port in which to run uptime-kuma";
+          description = "The port in which to run uptime-kuma.";
           default = 3001;
         };
         path = lib.mkOption {
           type = lib.types.nonEmptyStr;
-          description = "Webserver path to host your uptime-kuma server on";
+          description = "Webserver path to host your uptime-kuma server on.";
           default = "/";
         };
       };
@@ -26,7 +29,7 @@
         options = {
           uptimeKuma = lib.mkOption {
             type = lib.types.attrsOf (lib.types.submodule uptimeKumaSubmodule);
-            description = "An attrset of uptime-kuma instances";
+            description = "An attrset of uptime-kuma instances.";
           };
         };
 
@@ -39,7 +42,7 @@
               };
               garnix.server.persistence = {
                 enable = true;
-                name = "uptimeKuma";
+                name = lib.mkOverride 5 "uptimeKuma";
               };
               services.nginx = {
                 enable = true;
@@ -54,6 +57,6 @@
             }) config.uptimeKuma);
         };
       };
-      checks = import ./tests.nix { inherit self pkgs garnix-lib; };
+      checks = import ./tests.nix { inherit self; };
     };
 }

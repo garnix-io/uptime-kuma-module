@@ -1,7 +1,11 @@
-{ self, pkgs, garnix-lib }: {
-  x86_64-linux.default = pkgs.testers.runNixOSTest ({ lib, ... }: {
+{ self }:
+let
+  pkgs = import self.inputs.nixpkgs { system = "x86_64-linux"; };
+  garnix-lib = self.inputs.garnix-lib;
+in {
+  x86_64-linux.simple = pkgs.testers.runNixOSTest ({ lib, ... }: {
     name = "uptime-kuma";
-    nodes.default = { lib, pkgs, ... }:
+    nodes.simple = { lib, pkgs, ... }:
       let
         evaledGarnixModuleConfig = (garnix-lib.lib.evaledModulesForSystems {
           modules = [ self.garnixModules.default ({ }) ];
@@ -16,11 +20,11 @@
     testScript = { nodes, ... }: ''
       start_all()
 
-      default.wait_for_unit("multi-user.target")
-      default.wait_for_unit("uptime-kuma.service")
-      default.wait_for_unit("nginx.service")
+      simple.wait_for_unit("multi-user.target")
+      simple.wait_for_unit("uptime-kuma.service")
+      simple.wait_for_unit("nginx.service")
 
-      default.wait_until_succeeds("curl --fail http://127.0.0.1/dashboard", 20)
+      simple.wait_until_succeeds("curl --fail http://127.0.0.1/dashboard", 20)
     '';
   });
 }
