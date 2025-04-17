@@ -42,7 +42,7 @@
               };
               garnix.server.persistence = {
                 enable = true;
-                name = lib.mkOverride 5 "uptimeKuma";
+                name = "uptimeKuma";
               };
               services.nginx = {
                 enable = true;
