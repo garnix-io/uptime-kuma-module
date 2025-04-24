@@ -5,16 +5,15 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1744203559,
+        "lastModified": 1744728829,
         "narHash": "sha256-AgeSAV7IsDIVKZF4Gbf8A88cLamyd0hhEQ6Q25FA1d8=",
-        "owner": "jfroche",
+        "owner": "garnix-io",
         "repo": "garnix-lib",
-        "rev": "8e03a23b9f712479a63f566f5a48db548b4c915b",
+        "rev": "d3f3a98a0baddb3bdc6e0d028d1b58251a1d86f5",
         "type": "github"
       },
       "original": {
-        "owner": "jfroche",
-        "ref": "jfroche/expose-module-for-system",
+        "owner": "garnix-io",
         "repo": "garnix-lib",
         "type": "github"
       }
