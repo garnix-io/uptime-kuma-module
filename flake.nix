@@ -7,7 +7,7 @@
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
   inputs.garnix-lib.url =
-    "github:jfroche/garnix-lib/jfroche/expose-module-for-system";
+    "github:garnix-io/garnix-lib";
 
   outputs = { self, nixpkgs, ... }:
     let
